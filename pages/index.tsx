@@ -36,7 +36,7 @@ const Game: React.FC = () => {
 
   const moves = history.map((squares, move) => {
     let description: string;
-    
+
     if(move === currentMove) {
       description = 'You are at move #' + (move);
       return (
@@ -73,6 +73,7 @@ const Game: React.FC = () => {
 
 const Board: React.FC<{xIsNext:boolean, squares:string[], onPlay:(nextSquares:string[]) => void}> = (props) => {
   const winner = calculateWinner(props.squares);
+  const boardSize = 3;
   let status:string;
 
   function handleClick(i: number) {
@@ -94,24 +95,22 @@ const Board: React.FC<{xIsNext:boolean, squares:string[], onPlay:(nextSquares:st
     status = "Next player: " + (props.xIsNext ? "X" : "O");
   }
 
+  const boardRows = [];
+  for(let i = 0; i < boardSize; i++)
+  {
+    const boardRow = [];
+    for(let j = 0; j < boardSize; j++)
+    {
+      let location = (i * boardSize) + j;
+      boardRow.push(<Square key={location} value={props.squares[location]} onSquareClick={() => handleClick(location)}/>);
+    }
+    boardRows.push(<div key={i} className='flex flex-row'>{boardRow}</div>);
+  }
+
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex flex-row">
-          <Square value={props.squares[0]} onSquareClick={() => handleClick(0)}/>
-          <Square value={props.squares[1]} onSquareClick={() => handleClick(1)}/>
-          <Square value={props.squares[2]} onSquareClick={() => handleClick(2)}/>
-        </div>
-        <div className="flex flex-row">
-          <Square value={props.squares[3]} onSquareClick={() => handleClick(3)}/>
-          <Square value={props.squares[4]} onSquareClick={() => handleClick(4)}/>
-          <Square value={props.squares[5]} onSquareClick={() => handleClick(5)}/>
-        </div>
-        <div className="flex flex-row">
-          <Square value={props.squares[6]} onSquareClick={() => handleClick(6)}/>
-          <Square value={props.squares[7]} onSquareClick={() => handleClick(7)}/>
-          <Square value={props.squares[8]} onSquareClick={() => handleClick(8)}/>
-        </div>
+        {boardRows}
       </div>
       <h2>{status}</h2>
     </>
