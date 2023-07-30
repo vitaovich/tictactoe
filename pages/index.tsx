@@ -25,28 +25,34 @@ const Square: React.FC = () => {
   );
 }
 
+const Board: React.FC = () => {
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="flex flex-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="flex flex-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen bg-cream">
         <h1>Tic Tac Toe</h1>
-        <div className="flex flex-col">
-          <div className="flex flex-row">
-            <Square />
-            <Square />
-            <Square />
-          </div>
-          <div className="flex flex-row">
-            <Square />
-            <Square />
-            <Square />
-          </div>
-          <div className="flex flex-row">
-            <Square />
-            <Square />
-            <Square />
-          </div>
-        </div>
+        <Board />
       </div>
     </>
   )
