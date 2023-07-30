@@ -7,41 +7,43 @@ import { useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] })
 
-const Square: React.FC = () => {
-  const [value, setValue] = useState<string>('');
-
-  function handleClick() {
-    setValue('X');
-  }
-
+const Square: React.FC<{ value: string, onSquareClick: () => void }> = (props) => {
   return (
     <button 
       className="flex items-center justify-center w-8 h-8 m-2 rounded-md border-2 border-indigo-600 bg-indigo-200"
-      onClick={handleClick}
+      onClick={props.onSquareClick}
     >
-      {value}
+      {props.value}
     </button>
 
   );
 }
 
 const Board: React.FC = () => {
+  const [squares, setSquares] = useState<string[]>(Array(9).fill(''));
+
+  function handleClick() {
+    const nextSquares = squares.slice();
+    nextSquares[0] = "X";
+    setSquares(nextSquares);
+  }
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">
-        <Square />
-        <Square />
-        <Square />
+        <Square value={squares[0]} onSquareClick={handleClick}/>
+        <Square value={squares[1]} onSquareClick={handleClick}/>
+        <Square value={squares[2]} onSquareClick={handleClick}/>
       </div>
       <div className="flex flex-row">
-        <Square />
-        <Square />
-        <Square />
+        <Square value={squares[3]} onSquareClick={handleClick}/>
+        <Square value={squares[4]} onSquareClick={handleClick}/>
+        <Square value={squares[5]} onSquareClick={handleClick}/>
       </div>
       <div className="flex flex-row">
-        <Square />
-        <Square />
-        <Square />
+        <Square value={squares[6]} onSquareClick={handleClick}/>
+        <Square value={squares[7]} onSquareClick={handleClick}/>
+        <Square value={squares[8]} onSquareClick={handleClick}/>
       </div>
     </div>
   );
