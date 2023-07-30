@@ -36,13 +36,23 @@ const Game: React.FC = () => {
 
   const moves = history.map((squares, move) => {
     let description: string;
+    
+    if(move === currentMove) {
+      description = 'You are at move #' + (move);
+      return (
+        <li key={move} >
+          {description}
+        </li>
+      );
+    }
+
     if (move > 0) {
       description = 'Go to move #' + move;
     } else {
       description = 'Go to game start';
     }
     return (
-      <li key={move}>
+      <li key={move} className="border-2 border-black">
         <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
@@ -52,7 +62,7 @@ const Game: React.FC = () => {
     <>
       <h1>Tic Tac Toe</h1>
       <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      <div className="border-2">
+      <div>
         <ol>
           {moves}
         </ol>
