@@ -20,12 +20,20 @@ const Square: React.FC<{ value: string, onSquareClick: () => void }> = (props) =
 }
 
 const Board: React.FC = () => {
+  const [xIsNext, setXIsNext] = useState<boolean>(true);
   const [squares, setSquares] = useState<string[]>(Array(9).fill(''));
 
   function handleClick(i: number) {
     const nextSquares = squares.slice();
-    nextSquares[i] = "X";
+    if(xIsNext)
+    {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+
     setSquares(nextSquares);
+    setXIsNext(!xIsNext);
   }
 
   return (
