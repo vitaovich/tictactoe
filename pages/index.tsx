@@ -7,6 +7,81 @@ import { useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] })
 
+export default function Home() {
+  return (
+    <>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-cream">
+        <Game />
+      </div>
+    </>
+  )
+}
+
+const Game: React.FC = () => {
+  const [xIsNext, setXIsNext] = useState<boolean>(true);
+  const [history, setHistory] = useState<[string[]]>([Array(9).fill('')]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares: string[]) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <h1>Tic Tac Toe</h1>
+      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+    </>
+  );
+}
+
+const Board: React.FC<{xIsNext:boolean, squares:string[], onPlay:(nextSquares:string[]) => void}> = (props) => {
+  const winner = calculateWinner(props.squares);
+  let status:string;
+
+  function handleClick(i: number) {
+    if(props.squares[i] !== '' || calculateWinner(props.squares)) return;
+
+    const nextSquares = props.squares.slice();
+    if(props.xIsNext)
+    {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    props.onPlay(nextSquares);
+  }
+
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + (props.xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="flex flex-row">
+          <Square value={props.squares[0]} onSquareClick={() => handleClick(0)}/>
+          <Square value={props.squares[1]} onSquareClick={() => handleClick(1)}/>
+          <Square value={props.squares[2]} onSquareClick={() => handleClick(2)}/>
+        </div>
+        <div className="flex flex-row">
+          <Square value={props.squares[3]} onSquareClick={() => handleClick(3)}/>
+          <Square value={props.squares[4]} onSquareClick={() => handleClick(4)}/>
+          <Square value={props.squares[5]} onSquareClick={() => handleClick(5)}/>
+        </div>
+        <div className="flex flex-row">
+          <Square value={props.squares[6]} onSquareClick={() => handleClick(6)}/>
+          <Square value={props.squares[7]} onSquareClick={() => handleClick(7)}/>
+          <Square value={props.squares[8]} onSquareClick={() => handleClick(8)}/>
+        </div>
+      </div>
+      <h2>{status}</h2>
+    </>
+  );
+}
+
 const Square: React.FC<{ value: string, onSquareClick: () => void }> = (props) => {
   return (
     <button 
@@ -16,57 +91,6 @@ const Square: React.FC<{ value: string, onSquareClick: () => void }> = (props) =
       {props.value}
     </button>
 
-  );
-}
-
-const Board: React.FC = () => {
-  const [xIsNext, setXIsNext] = useState<boolean>(true);
-  const [squares, setSquares] = useState<string[]>(Array(9).fill(''));
-  const winner = calculateWinner(squares);
-  let status:string;
-
-  function handleClick(i: number) {
-    if(squares[i] !== '' || calculateWinner(squares)) return;
-
-    const nextSquares = squares.slice();
-    if(xIsNext)
-    {
-      nextSquares[i] = "X";
-    } else {
-      nextSquares[i] = "O";
-    }
-
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
-  }
-
-  if (winner) {
-    status = "Winner: " + winner;
-  } else {
-    status = "Next player: " + (xIsNext ? "X" : "O");
-  }
-
-  return (
-    <>
-      <div className="flex flex-col">
-        <div className="flex flex-row">
-          <Square value={squares[0]} onSquareClick={() => handleClick(0)}/>
-          <Square value={squares[1]} onSquareClick={() => handleClick(1)}/>
-          <Square value={squares[2]} onSquareClick={() => handleClick(2)}/>
-        </div>
-        <div className="flex flex-row">
-          <Square value={squares[3]} onSquareClick={() => handleClick(3)}/>
-          <Square value={squares[4]} onSquareClick={() => handleClick(4)}/>
-          <Square value={squares[5]} onSquareClick={() => handleClick(5)}/>
-        </div>
-        <div className="flex flex-row">
-          <Square value={squares[6]} onSquareClick={() => handleClick(6)}/>
-          <Square value={squares[7]} onSquareClick={() => handleClick(7)}/>
-          <Square value={squares[8]} onSquareClick={() => handleClick(8)}/>
-        </div>
-      </div>
-      <h2>{status}</h2>
-    </>
   );
 }
 
@@ -88,15 +112,4 @@ function calculateWinner(squares: string[]) {
     }
   }
   return null;
-}
-
-export default function Home() {
-  return (
-    <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-cream">
-        <h1>Tic Tac Toe</h1>
-        <Board />
-      </div>
-    </>
-  )
 }
