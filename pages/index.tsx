@@ -10,7 +10,8 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-cream">
+      <div className="flex flex-col space-y-4 items-center justify-center min-h-screen bg-gray-200">
+        <h1>Tic Tac Toe</h1>
         <Game />
       </div>
     </>
@@ -29,18 +30,17 @@ const Game: React.FC = () => {
     setCurrentMove(nextHistory.length - 1);
   }
 
-  function jumpTo(nextMove:number)
-  {
+  function jumpTo(nextMove: number) {
     setCurrentMove(nextMove);
   }
 
   const moves = history.map((squares, move) => {
     let description: string;
 
-    if(move === currentMove) {
+    if (move === currentMove) {
       description = 'You are at move #' + (move);
       return (
-        <li key={move} >
+        <li key={move}className="px-2 py-1" >
           {description}
         </li>
       );
@@ -52,36 +52,36 @@ const Game: React.FC = () => {
       description = 'Go to game start';
     }
     return (
-      <li key={move} className="border-2 border-black">
-        <button onClick={() => jumpTo(move)}>{description}</button>
+      <li key={move} className="border border-gray-500 bg-gray-200 rounded-md px-2 py-1" >
+        <button  onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
   });
 
   return (
     <>
-      <h1>Tic Tac Toe</h1>
-      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      <div>
-        <ol>
-          {moves}
-        </ol>
+      <div className="flex flex-row space-x-4 bg-white rounded-md border border-gray-500 p-4">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+        <div>
+          <ol className='space-y-2'>
+            {moves}
+          </ol>
+        </div>
       </div>
     </>
   );
 }
 
-const Board: React.FC<{xIsNext:boolean, squares:string[], onPlay:(nextSquares:string[]) => void}> = (props) => {
+const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquares: string[]) => void }> = (props) => {
   const winner = calculateWinner(props.squares);
   const boardSize = 3;
-  let status:string;
+  let status: string;
 
   function handleClick(i: number) {
-    if(props.squares[i] !== '' || calculateWinner(props.squares)) return;
+    if (props.squares[i] !== '' || calculateWinner(props.squares)) return;
 
     const nextSquares = props.squares.slice();
-    if(props.xIsNext)
-    {
+    if (props.xIsNext) {
       nextSquares[i] = "X";
     } else {
       nextSquares[i] = "O";
@@ -96,31 +96,29 @@ const Board: React.FC<{xIsNext:boolean, squares:string[], onPlay:(nextSquares:st
   }
 
   const boardRows = [];
-  for(let i = 0; i < boardSize; i++)
-  {
+  for (let i = 0; i < boardSize; i++) {
     const boardRow = [];
-    for(let j = 0; j < boardSize; j++)
-    {
+    for (let j = 0; j < boardSize; j++) {
       let location = (i * boardSize) + j;
-      boardRow.push(<Square key={location} value={props.squares[location]} onSquareClick={() => handleClick(location)}/>);
+      boardRow.push(<Square key={location} value={props.squares[location]} onSquareClick={() => handleClick(location)} />);
     }
     boardRows.push(<div key={i} className='flex flex-row'>{boardRow}</div>);
   }
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center">
+        <h2>{status}</h2>
         {boardRows}
       </div>
-      <h2>{status}</h2>
     </>
   );
 }
 
 const Square: React.FC<{ value: string, onSquareClick: () => void }> = (props) => {
   return (
-    <button 
-      className="flex items-center justify-center w-8 h-8 m-2 rounded-md border-2 border-indigo-600 bg-indigo-200"
+    <button
+      className="flex items-center justify-center w-12 h-12 m-1 rounded-md border-2 border-indigo-600 bg-indigo-200"
       onClick={props.onSquareClick}
     >
       {props.value}
