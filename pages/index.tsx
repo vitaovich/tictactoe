@@ -146,11 +146,11 @@ const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquare
 }
 
 const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boolean | undefined }> = (props) => {
-  const buttonClasses = props.isWinner ? 'border-green-600 bg-green-200' : 'border-indigo-600 bg-indigo-200';
+  const buttonClasses = props.isWinner ? 'border-green-600 bg-green-200 text-green-700' : 'border-indigo-600 bg-indigo-200 text-indigo-700';
 
   return (
     <button
-      className={`flex items-center justify-center w-20 h-20 text-indigo-700 text-5xl m-1 rounded-md border-2 ${buttonClasses}`}
+      className={`flex items-center justify-center w-20 h-20 text-5xl m-1 border-2 ${buttonClasses}`}
       onClick={props.onSquareClick}
     >
       {props.value}
