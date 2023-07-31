@@ -155,7 +155,7 @@ const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boo
   const selectableClass = props.value === '' ? 'hover:animate-pulse hover:bg-indigo-400' : '';
   return (
     <button
-      className={`flex items-center justify-center w-20 h-20 text-5xl m-1 border-2 ${selectableClass} ${buttonClasses}`}
+      className={`flex items-center justify-center w-24 h-24 text-7xl m-1 border-2 ${selectableClass} ${buttonClasses}`}
       onClick={props.onSquareClick}
     >
       {props.value}
