@@ -51,8 +51,10 @@ const Game: React.FC = () => {
     if (move === currentMove) {
       description = 'You are at move #' + (move) + `${currentMove > 0 ? calculateRowCol(playHistory[move - 1]) : ''}`;
       return (
-        <li key={move} className="px-2 py-1" >
-          {description}
+        <li key={move} className="bg-gray-400 text-white rounded-md px-2 py-1" >
+          <div className="">
+            {description}
+          </div>
         </li>
       );
     }
@@ -62,7 +64,7 @@ const Game: React.FC = () => {
       description = 'Go to game start';
     }
     return (
-      <li key={move} className="border bg-gray-700 text-white rounded-md px-2 py-1" >
+      <li key={move} className="border bg-gray-700 text-white rounded-md px-2 py-1 hover:bg-gray-600" >
         <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
@@ -76,15 +78,15 @@ const Game: React.FC = () => {
       <div className="flex flex-col items-center justify-center min-h-screen space-y-10">
         <h1 className='text-3xl text-indigo-800'>Tic Tac Toe</h1>
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} isGameOver={isGameOver} />
-        <button onClick={toggleHistory} className='rounded-md border border-gray-500 bg-gray-400 text-white px-2 py-1'>History</button>
+        <button onClick={toggleHistory} className='rounded-md bg-gray-400 text-white px-2 py-1 hover:bg-gray-500'>History</button>
       </div>
 
       <div className={`${displayHistoryClass} absolute left-0 top-0`}>
         <div className="bg-gray-200 p-4 min-h-screen">
           <div>
             <div className="flex flex-row justify-between">
-              <button onClick={reverseMoveOrder} className="border border-gray-500 bg-gray-400 text-white rounded-md px-2 py-1 mb-2">Sort</button>
-              <button onClick={toggleHistory} className="px-2 py-1 mb-2">X</button>
+              <button onClick={reverseMoveOrder} className="bg-gray-400 text-white rounded-md px-2 py-1 mb-2 hover:bg-gray-500">Sort</button>
+              <button onClick={toggleHistory} className="px-2 py-1 mb-2 rounded-md w-8 h-8 bg-red-500 text-white">X</button>
             </div>
             <ol className='space-y-2'>
               {moves}
@@ -147,10 +149,10 @@ const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquare
 
 const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boolean | undefined }> = (props) => {
   const buttonClasses = props.isWinner ? 'border-green-600 bg-green-200 text-green-700' : 'border-indigo-600 bg-indigo-200 text-indigo-700';
-
+  const selectableClass = props.value === '' ? 'hover:animate-pulse hover:bg-indigo-400' : '';
   return (
     <button
-      className={`flex items-center justify-center w-20 h-20 text-5xl m-1 border-2 ${buttonClasses}`}
+      className={`flex items-center justify-center w-20 h-20 text-5xl m-1 border-2 ${selectableClass} ${buttonClasses}`}
       onClick={props.onSquareClick}
     >
       {props.value}
