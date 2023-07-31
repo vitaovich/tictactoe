@@ -10,10 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col space-y-4 items-center justify-center min-h-screen bg-gray-200">
-        <h1>Tic Tac Toe</h1>
-        <Game />
-      </div>
+      <Game />
     </>
   )
 }
@@ -23,6 +20,7 @@ const Game: React.FC = () => {
   const [playHistory, setPlayHistory] = useState<number[]>([]);
   const [currentMove, setCurrentMove] = useState<number>(0);
   const [moveOrder, setMoveOrder] = useState<boolean>(true);
+  const [showHistory, setShowHistory] = useState<boolean>(false);
   const xIsNext = currentMove % 2 === 0;
   const isGameOver = history.length > 9;
   const currentSquares = history[currentMove];
@@ -43,40 +41,54 @@ const Game: React.FC = () => {
     setMoveOrder(!moveOrder);
   }
 
+  function toggleHistory() {
+    setShowHistory(!showHistory);
+  }
+
   let moves = history.map((squares, move) => {
     let description: string;
 
     if (move === currentMove) {
-      description = 'You are at move #' + (move) + ` (${calculateRowCol(playHistory[move - 1])})`;
+      description = 'You are at move #' + (move) + `${currentMove > 0 ? calculateRowCol(playHistory[move - 1]) : ''}`;
       return (
-        <li key={move}className="px-2 py-1" >
+        <li key={move} className="px-2 py-1" >
           {description}
         </li>
       );
     }
     if (move > 0) {
-      description = 'Go to move #' + move + ` (${calculateRowCol(playHistory[move - 1])})`;
+      description = 'Go to move #' + move + `${calculateRowCol(playHistory[move - 1])}`;
     } else {
       description = 'Go to game start';
     }
     return (
       <li key={move} className="border border-gray-500 bg-gray-200 rounded-md px-2 py-1" >
-        <button  onClick={() => jumpTo(move)}>{description}</button>
+        <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
   });
 
   moves = moveOrder ? moves : moves.reverse();
+  const displayHistoryClass = showHistory ? '' : 'hidden';
 
   return (
     <>
-      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} isGameOver={isGameOver} />
-      <div className="flex flex-row space-x-4 bg-white rounded-md border border-gray-500 p-4">
-        <div>
-          <button onClick={reverseMoveOrder} className="border border-green-500 bg-green-200 rounded-md px-2 py-1 mb-2">Sort</button>
-          <ol className='space-y-2'>
-            {moves}
-          </ol>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300">
+        <h1>Tic Tac Toe</h1>
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} isGameOver={isGameOver} />
+        <button onClick={toggleHistory} className='rounded-md border border-gray-500 bg-white px-2 py-1'>History</button>
+      </div>
+      <div className={`${displayHistoryClass} absolute left-0 top-0`}>
+        <div className="bg-gray-200 p-4 min-h-screen">
+          <div>
+            <div className="flex flex-row justify-between">
+              <button onClick={reverseMoveOrder} className="border border-indigo-500 bg-indigo-200 rounded-md px-2 py-1 mb-2">Sort</button>
+              <button onClick={toggleHistory} className="px-2 py-1 mb-2">X</button>
+            </div>
+            <ol className='space-y-2'>
+              {moves}
+            </ol>
+          </div>
         </div>
       </div>
     </>
@@ -103,9 +115,8 @@ const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquare
   if (winnerSquares) {
     const winner = props.squares[winnerSquares[0]]
     status = "Winner: " + winner;
-  } 
-  else if (props.isGameOver)
-  {
+  }
+  else if (props.isGameOver) {
     status = "Draw"
   }
   else {
@@ -135,7 +146,7 @@ const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquare
 
 const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boolean | undefined }> = (props) => {
   const buttonClasses = props.isWinner ? 'border-green-600 bg-green-200' : 'border-indigo-600 bg-indigo-200';
-  
+
   return (
     <button
       className={`flex items-center justify-center w-12 h-12 m-1 rounded-md border-2 ${buttonClasses}`}
@@ -149,15 +160,15 @@ const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boo
 
 function calculateRowCol(location: number) {
   const rowCols = [
-    '1,1',
-    '1,2',
-    '1,3',
-    '2,1',
-    '2,2',
-    '2,3',
-    '3,1',
-    '3,2',
-    '3,3',
+    '(1,1)',
+    '(1,2)',
+    '(1,3)',
+    '(2,1)',
+    '(2,2)',
+    '(2,3)',
+    '(3,1)',
+    '(3,2)',
+    '(3,3)',
   ]
   return rowCols[location];
 }
