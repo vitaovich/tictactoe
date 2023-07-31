@@ -78,7 +78,10 @@ const Game: React.FC = () => {
       <div className="flex flex-col items-center justify-center min-h-screen space-y-10">
         <h1 className='text-3xl text-indigo-800'>Tic Tac Toe</h1>
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} isGameOver={isGameOver} />
-        <button onClick={toggleHistory} className='rounded-md bg-gray-400 text-white px-2 py-1 hover:bg-gray-500'>History</button>
+        <div className="flex flex-row space-x-4">
+          <button onClick={toggleHistory} className='rounded-md bg-gray-400 text-white uppercase px-2 py-1 hover:bg-gray-500'>History</button>
+          <button onClick={() => jumpTo(0)} className='rounded-md bg-green-500 text-white uppercase px-2 py-1 hover:bg-green-400'>Reset</button>
+        </div>
       </div>
 
       <div className={`${displayHistoryClass} absolute left-0 top-0`}>
