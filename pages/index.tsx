@@ -20,15 +20,18 @@ export default function Home() {
 
 const Game: React.FC = () => {
   const [history, setHistory] = useState<string[][]>([Array(9).fill('')]);
+  const [playHistory, setPlayHistory] = useState<number[]>([]);
   const [currentMove, setCurrentMove] = useState<number>(0);
   const [moveOrder, setMoveOrder] = useState<boolean>(true);
   const xIsNext = currentMove % 2 === 0;
   const isGameOver = history.length > 9;
   const currentSquares = history[currentMove];
 
-  function handlePlay(nextSquares: string[]) {
+  function handlePlay(nextSquares: string[], playLocation: number) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    const nextPlayHistory = [...playHistory.slice(0, currentMove + 1), playLocation];
     setHistory(nextHistory);
+    setPlayHistory(nextPlayHistory);
     setCurrentMove(nextHistory.length - 1);
   }
 
@@ -44,7 +47,7 @@ const Game: React.FC = () => {
     let description: string;
 
     if (move === currentMove) {
-      description = 'You are at move #' + (move);
+      description = 'You are at move #' + (move) + ` (${calculateRowCol(playHistory[move - 1])})`;
       return (
         <li key={move}className="px-2 py-1" >
           {description}
@@ -52,7 +55,7 @@ const Game: React.FC = () => {
       );
     }
     if (move > 0) {
-      description = 'Go to move #' + move;
+      description = 'Go to move #' + move + ` (${calculateRowCol(playHistory[move - 1])})`;
     } else {
       description = 'Go to game start';
     }
@@ -80,7 +83,7 @@ const Game: React.FC = () => {
   );
 }
 
-const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquares: string[]) => void, isGameOver: boolean }> = (props) => {
+const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquares: string[], playLocation: number) => void, isGameOver: boolean }> = (props) => {
   const winnerSquares = calculateWinner(props.squares);
   const boardSize = 3;
   let status: string;
@@ -94,7 +97,7 @@ const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquare
     } else {
       nextSquares[i] = "O";
     }
-    props.onPlay(nextSquares);
+    props.onPlay(nextSquares, i);
   }
 
   if (winnerSquares) {
@@ -142,6 +145,21 @@ const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boo
     </button>
 
   );
+}
+
+function calculateRowCol(location: number) {
+  const rowCols = [
+    '1,1',
+    '1,2',
+    '1,3',
+    '2,1',
+    '2,2',
+    '2,3',
+    '3,1',
+    '3,2',
+    '3,3',
+  ]
+  return rowCols[location];
 }
 
 function calculateWinner(squares: string[]) {
