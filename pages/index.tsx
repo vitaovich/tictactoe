@@ -21,6 +21,7 @@ export default function Home() {
 const Game: React.FC = () => {
   const [history, setHistory] = useState<string[][]>([Array(9).fill('')]);
   const [currentMove, setCurrentMove] = useState<number>(0);
+  const [moveOrder, setMoveOrder] = useState<boolean>(true);
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
@@ -34,7 +35,11 @@ const Game: React.FC = () => {
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
+  function reverseMoveOrder() {
+    setMoveOrder(!moveOrder);
+  }
+
+  let moves = history.map((squares, move) => {
     let description: string;
 
     if (move === currentMove) {
@@ -45,7 +50,6 @@ const Game: React.FC = () => {
         </li>
       );
     }
-
     if (move > 0) {
       description = 'Go to move #' + move;
     } else {
@@ -58,11 +62,14 @@ const Game: React.FC = () => {
     );
   });
 
+  moves = moveOrder ? moves : moves.reverse();
+
   return (
     <>
+      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       <div className="flex flex-row space-x-4 bg-white rounded-md border border-gray-500 p-4">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
         <div>
+          <button onClick={reverseMoveOrder} className="border border-green-500 bg-green-200 rounded-md px-2 py-1 mb-2">Sort</button>
           <ol className='space-y-2'>
             {moves}
           </ol>
