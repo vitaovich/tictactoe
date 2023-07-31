@@ -57,12 +57,12 @@ const Game: React.FC = () => {
       );
     }
     if (move > 0) {
-      description = 'Go to move #' + move + `${calculateRowCol(playHistory[move - 1])}`;
+      description = 'Go to move #' + move + ` ${calculateRowCol(playHistory[move - 1])}`;
     } else {
       description = 'Go to game start';
     }
     return (
-      <li key={move} className="border border-gray-500 bg-gray-200 rounded-md px-2 py-1" >
+      <li key={move} className="border bg-gray-700 text-white rounded-md px-2 py-1" >
         <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
@@ -73,16 +73,17 @@ const Game: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300">
-        <h1>Tic Tac Toe</h1>
+      <div className="flex flex-col items-center justify-center min-h-screen space-y-10">
+        <h1 className='text-3xl text-indigo-800'>Tic Tac Toe</h1>
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} isGameOver={isGameOver} />
-        <button onClick={toggleHistory} className='rounded-md border border-gray-500 bg-white px-2 py-1'>History</button>
+        <button onClick={toggleHistory} className='rounded-md border border-gray-500 bg-gray-400 text-white px-2 py-1'>History</button>
       </div>
+
       <div className={`${displayHistoryClass} absolute left-0 top-0`}>
         <div className="bg-gray-200 p-4 min-h-screen">
           <div>
             <div className="flex flex-row justify-between">
-              <button onClick={reverseMoveOrder} className="border border-indigo-500 bg-indigo-200 rounded-md px-2 py-1 mb-2">Sort</button>
+              <button onClick={reverseMoveOrder} className="border border-gray-500 bg-gray-400 text-white rounded-md px-2 py-1 mb-2">Sort</button>
               <button onClick={toggleHistory} className="px-2 py-1 mb-2">X</button>
             </div>
             <ol className='space-y-2'>
@@ -137,7 +138,7 @@ const Board: React.FC<{ xIsNext: boolean, squares: string[], onPlay: (nextSquare
   return (
     <>
       <div className="flex flex-col items-center">
-        <h2>{status}</h2>
+        <h2 className='text-lg text-indigo-700 mb-2'>{status}</h2>
         {boardRows}
       </div>
     </>
@@ -149,7 +150,7 @@ const Square: React.FC<{ value: string, onSquareClick: () => void, isWinner: boo
 
   return (
     <button
-      className={`flex items-center justify-center w-12 h-12 m-1 rounded-md border-2 ${buttonClasses}`}
+      className={`flex items-center justify-center w-20 h-20 text-indigo-700 text-5xl m-1 rounded-md border-2 ${buttonClasses}`}
       onClick={props.onSquareClick}
     >
       {props.value}
